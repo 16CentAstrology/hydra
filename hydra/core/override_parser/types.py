@@ -189,6 +189,7 @@ class OverrideType(Enum):
     ADD = 2
     FORCE_ADD = 3
     DEL = 4
+    EXTEND_LIST = 5
 
 
 class ValueType(Enum):
@@ -225,6 +226,11 @@ class Glob:
                 res.append(name)
 
         return res
+
+
+@dataclass
+class ListExtensionOverrideValue:
+    values: List["ParsedElementType"]
 
 
 class Transformer:
@@ -286,12 +292,17 @@ class Override:
         """
         return self.type == OverrideType.FORCE_ADD
 
+    def is_list_extend(self) -> bool:
+        """
+        :return: True if this override represents appending to a list config value
+        """
+        return self.type == OverrideType.EXTEND_LIST
+
     @staticmethod
     def _convert_value(value: ParsedElementType) -> Optional[ElementType]:
         if isinstance(value, list):
             return [Override._convert_value(x) for x in value]
         elif isinstance(value, dict):
-
             return {
                 # We ignore potential type mismatch here so as to let OmegaConf
                 # raise an explicit error in case of invalid type.

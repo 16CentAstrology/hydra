@@ -31,8 +31,7 @@ class LibraryClass:
 
 
 class Empty:
-    def __init__(self):
-        ...
+    def __init__(self): ...
 
     def __eq__(self, other):
         return isinstance(other, type(self))
@@ -180,7 +179,7 @@ class DictValues:
         )
 
 
-class PeskySentinel(object):
+class PeskySentinel:
     def __repr__(self):
         return "<I am a pesky sentinel>"
 

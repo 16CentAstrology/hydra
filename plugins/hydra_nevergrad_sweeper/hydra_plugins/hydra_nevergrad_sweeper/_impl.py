@@ -60,7 +60,7 @@ def create_nevergrad_param_from_config(
 def create_nevergrad_parameter_from_override(override: Override) -> Any:
     val = override.value()
     if not override.is_sweep_override():
-        return val
+        return override.get_value_element_as_str()
     if override.is_choice_sweep():
         assert isinstance(val, ChoiceSweep)
         vals = [x for x in override.sweep_iterator(transformer=Transformer.encode)]
@@ -76,7 +76,7 @@ def create_nevergrad_parameter_from_override(override: Override) -> Any:
         if "log" in val.tags:
             scalar = ng.p.Log(lower=val.start, upper=val.end)
         else:
-            scalar = ng.p.Scalar(lower=val.start, upper=val.end)  # type: ignore
+            scalar = ng.p.Scalar(lower=val.start, upper=val.end)
         if isinstance(val.start, int):
             scalar.set_integer_casting()
         return scalar
@@ -117,7 +117,6 @@ class NevergradSweeperImpl(Sweeper):
         )
 
     def sweep(self, arguments: List[str]) -> None:
-
         assert self.config is not None
         assert self.launcher is not None
         assert self.job_idx is not None
@@ -130,9 +129,9 @@ class NevergradSweeperImpl(Sweeper):
         parsed = parser.parse_overrides(arguments)
 
         for override in parsed:
-            params[
-                override.get_key_element()
-            ] = create_nevergrad_parameter_from_override(override)
+            params[override.get_key_element()] = (
+                create_nevergrad_parameter_from_override(override)
+            )
 
         parametrization = ng.p.Dict(**params)
         parametrization.function.deterministic = not self.opt_config.noisy

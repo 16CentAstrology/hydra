@@ -15,7 +15,7 @@ from contextlib import contextmanager
 from difflib import unified_diff
 from pathlib import Path
 from subprocess import PIPE, Popen
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Protocol, Tuple, Union
 
 from omegaconf import Container, DictConfig, OmegaConf
 
@@ -24,11 +24,6 @@ from hydra._internal.utils import detect_task_name
 from hydra.core.global_hydra import GlobalHydra
 from hydra.core.utils import JobReturn, validate_config_path
 from hydra.types import TaskFunction
-
-if sys.version_info >= (3, 8, 0):
-    from typing import Protocol
-else:
-    from typing_extensions import Protocol  # type: ignore
 
 
 @contextmanager
@@ -74,7 +69,7 @@ class TaskTestFunction:
             self.temp_dir = tempfile.mkdtemp()
             overrides = copy.deepcopy(self.overrides)
             assert overrides is not None
-            overrides.append(f"hydra.run.dir={self.temp_dir}")
+            overrides.append(f'hydra.run.dir="{self.temp_dir}"')
             self.job_ret = self.hydra.run(
                 config_name=self.config_name,
                 task_function=self,
@@ -102,8 +97,7 @@ class TTaskRunner(Protocol):
         config_name: Optional[str],
         overrides: Optional[List[str]] = None,
         configure_logging: bool = False,
-    ) -> TaskTestFunction:
-        ...
+    ) -> TaskTestFunction: ...
 
 
 class SweepTaskFunction:
@@ -184,8 +178,7 @@ class TSweepRunner(Protocol):
         config_name: Optional[str],
         overrides: Optional[List[str]],
         temp_dir: Optional[Path] = None,
-    ) -> SweepTaskFunction:
-        ...
+    ) -> SweepTaskFunction: ...
 
 
 def chdir_hydra_root(subdir: Optional[str] = None) -> None:
@@ -221,7 +214,7 @@ def find_parent_dir_containing(
         cur = os.path.relpath(os.path.join(cur, ".."))
         max_up = max_up - 1
     if max_up == 0:
-        raise IOError(f"Could not find {target} in parents of {os.getcwd()}")
+        raise OSError(f"Could not find {target} in parents of {os.getcwd()}")
     return cur
 
 
@@ -333,7 +326,7 @@ if __name__ == "__main__":
                 modified_env.update(env_override)
         subprocess.check_call(cmd, env=modified_env)
 
-        with open(output_file, "r") as f:
+        with open(output_file) as f:
             file_str = f.read()
             output = str.splitlines(file_str)
 

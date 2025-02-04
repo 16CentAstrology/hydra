@@ -16,13 +16,12 @@ dependencies = [
 
 def _run_command(command: str) -> str:
     print(f"{str( datetime.now() )} - OUT: {command}")
-    output = subprocess.getoutput(command)
+    output = subprocess.getoutput(command)  # nosec B605
     print(f"{str( datetime.now() )} - OUT: {output}")
     return output
 
 
 def run(py_version):
-
     _run_command("rm /home/ubuntu/ray_bootstrap_config.yaml")
 
     _run_command(f"conda create -n hydra_{py_version} python={py_version} -y")

@@ -215,7 +215,6 @@ class LauncherTestSuite:
         overrides: List[str],
         tmpdir: Path,
     ) -> None:
-
         overrides1 = ["hydra/launcher=" + launcher_name] + overrides
 
         def task_func(c: DictConfig) -> Any:
@@ -658,6 +657,9 @@ class IntegrationTestSuite:
         cfg = OmegaConf.merge(task_launcher_cfg, task_config)
         assert isinstance(cfg, DictConfig)
         path = str(Path("/foo/bar").absolute())
+        # Hack to use the right drive on windows
+        if path.startswith("D:"):
+            path = path.replace("D:", "C:", 1)
         integration_test(
             tmpdir=self.get_test_scratch_dir(tmpdir),
             task_config=cfg,

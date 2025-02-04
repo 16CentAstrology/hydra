@@ -1,5 +1,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 
+import json
 import logging.config
 import os
 from pathlib import Path
@@ -19,6 +20,14 @@ ConvertMode = hydra.types.ConvertMode
 
 
 def get_class(path: str) -> type:
+    """
+    Look up a class based on a dotpath.
+    Fails if the path does not point to a class.
+
+    >>> import my_module
+    >>> from hydra.utils import get_class
+    >>> assert get_class("my_module.MyClass") is my_module.MyClass
+    """
     try:
         cls = _locate(path)
         if not isinstance(cls, type):
@@ -28,11 +37,19 @@ def get_class(path: str) -> type:
             )
         return cls
     except Exception as e:
-        log.error(f"Error initializing class at {path}: {e}")
+        log.error(f"Error getting class at {path}: {e}")
         raise e
 
 
 def get_method(path: str) -> Callable[..., Any]:
+    """
+    Look up a callable based on a dotpath.
+    Fails if the path does not point to a callable object.
+
+    >>> import my_module
+    >>> from hydra.utils import get_method
+    >>> assert get_method("my_module.my_function") is my_module.my_function
+    """
     try:
         obj = _locate(path)
         if not callable(obj):
@@ -49,6 +66,23 @@ def get_method(path: str) -> Callable[..., Any]:
 
 # Alias for get_method
 get_static_method = get_method
+
+
+def get_object(path: str) -> Any:
+    """
+    Look up an entity based on the dotpath.
+    Does not perform any type checks on the entity.
+
+    >>> import my_module
+    >>> from hydra.utils import get_object
+    >>> assert get_object("my_module.my_object") is my_module.my_object
+    """
+    try:
+        obj = _locate(path)
+        return obj
+    except Exception as e:
+        log.error(f"Error getting object at {path} : {e}")
+        raise e
 
 
 def get_original_cwd() -> str:
@@ -82,3 +116,33 @@ def to_absolute_path(path: str) -> str:
     else:
         ret = base / p
     return str(ret)
+
+
+def to_hydra_override_value_str(obj: Any) -> str:
+    """
+    Basic conversion of an object to a string that can be used in a Hydra override.
+    Does not explicitly support all types but should work for basic structures.
+
+    >>> obj = {"foo": 1, "bar": "baz"}
+    >>> compose(config_name="config", overrides=[f"a={to_hydra_override_value_str(obj)}", "x=1"])
+
+    :param obj: object to convert
+    :return: string representation of the object that can be used in a Hydra override
+    """
+    if isinstance(obj, dict):
+        return (
+            "{"
+            + ", ".join(
+                f"{key}: {to_hydra_override_value_str(value)}"
+                for key, value in obj.items()
+            )
+            + "}"
+        )
+    elif isinstance(obj, list):
+        return (
+            "[" + ", ".join([to_hydra_override_value_str(value) for value in obj]) + "]"
+        )
+    elif isinstance(obj, str):
+        new_str = obj.replace('\\"', '\\\\"').replace('"', '\\"')
+        return f'"{new_str}"'
+    return json.dumps(obj)

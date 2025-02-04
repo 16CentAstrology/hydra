@@ -121,7 +121,6 @@ class Plugins(metaclass=Singleton):
 
     @staticmethod
     def is_in_toplevel_plugins_module(clazz: str) -> bool:
-
         return clazz.startswith("hydra_plugins.") or clazz.startswith(
             "hydra._internal.core_plugins."
         )
@@ -164,7 +163,6 @@ class Plugins(metaclass=Singleton):
     def _scan_all_plugins(
         modules: List[Any],
     ) -> Tuple[List[Type[Plugin]], ScanStats]:
-
         stats = ScanStats()
         stats.total_time = timer()
 
@@ -189,13 +187,14 @@ class Plugins(metaclass=Singleton):
                             assert m is not None
                             loaded_mod = m.load_module(modname)
                         else:
-                            spec = importer.find_spec(modname)
+                            spec = importer.find_spec(modname)  # type: ignore[call-arg]
                             assert spec is not None
                             if modname in sys.modules:
                                 loaded_mod = sys.modules[modname]
                             else:
                                 loaded_mod = importlib.util.module_from_spec(spec)
                             if loaded_mod is not None:
+                                assert spec.loader is not None
                                 spec.loader.exec_module(loaded_mod)
                                 sys.modules[modname] = loaded_mod
 

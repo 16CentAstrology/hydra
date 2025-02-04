@@ -15,7 +15,7 @@ from nox.logger import logger
 
 BASE = os.path.abspath(os.path.dirname(__file__))
 
-DEFAULT_PYTHON_VERSIONS = ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
+DEFAULT_PYTHON_VERSIONS = ["3.8", "3.9", "3.10", "3.11"]
 DEFAULT_OS_NAMES = ["Linux", "MacOS", "Windows"]
 
 PYTHON_VERSIONS = os.environ.get(
@@ -83,11 +83,11 @@ def find_dirs(path: str) -> Iterator[str]:
             yield fullname
 
 
-def _print_installed_omegaconf_version(session: Session) -> None:
+def print_installed_package_version(session: Session, package_name: str) -> None:
     pip_list: str = session.run("pip", "list", silent=True)
     for line in pip_list.split("\n"):
-        if "omegaconf" in line:
-            print(f"Installed omegaconf version: {line}")
+        if package_name in line:
+            print(f"Installed {package_name} version: {line}")
 
 
 def install_hydra(session: Session, cmd: List[str]) -> None:
@@ -98,7 +98,7 @@ def install_hydra(session: Session, cmd: List[str]) -> None:
     if USE_OMEGACONF_DEV_VERSION:
         session.install("--pre", "omegaconf", silent=SILENT)
     session.run(*cmd, ".", silent=SILENT)
-    _print_installed_omegaconf_version(session)
+    print_installed_package_version(session, "omegaconf")
     if not SILENT:
         session.install("pipdeptree", silent=SILENT)
         session.run("pipdeptree", "-p", "hydra-core")
@@ -116,12 +116,35 @@ def install_selected_plugins(
 
 
 def install_plugin(session: Session, install_cmd: List[str], plugin: Plugin) -> None:
+    maybe_install_torch(session, plugin)
     cmd = install_cmd + [plugin.abspath]
     session.run(*cmd, silent=SILENT)
     if not SILENT:
         session.run("pipdeptree", "-p", plugin.name)
     # Test that we can import all installed plugins
     session.run("python", "-c", f"import {plugin.module}")
+
+
+def maybe_install_torch(session: Session, plugin: Plugin) -> None:
+    if plugin_requires_torch(plugin):
+        install_cpu_torch(session)
+        print_installed_package_version(session, "torch")
+
+
+def plugin_requires_torch(plugin: Plugin) -> bool:
+    """Determine whether the given plugin depends on pytorch as a requirement"""
+    return '"torch"' in Path(plugin.setup_py).read_text()
+
+
+def install_cpu_torch(session: Session) -> None:
+    """
+    Install the CPU version of pytorch.
+    This is a much smaller download size than the normal version `torch` package hosted on pypi.
+    The smaller download prevents our CI jobs from timing out.
+    """
+    session.install(
+        "torch", "--extra-index-url", "https://download.pytorch.org/whl/cpu"
+    )
 
 
 def pytest_args(*args: str) -> List[str]:
@@ -163,45 +186,48 @@ def get_plugin_os_names(classifiers: List[str]) -> List[str]:
 @functools.lru_cache()
 def list_plugins(directory: str) -> List[Plugin]:
     blacklist = [".isort.cfg", "examples"]
-    _plugins = [
-        {"dir_name": x, "path": x}
+    _plugin_directories = [
+        x
         for x in sorted(os.listdir(os.path.join(BASE, directory)))
         if x not in blacklist
     ]
 
-    # Install read-version in base python environment, needed to run setup.py
+    # Install bootstrap deps in base python environment
     subprocess.check_output(
-        [sys.executable, "-m", "pip", "install", "read-version"],
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "read-version",  # needed to read data from setup.py
+            "toml",  # so read-version can read pyproject.toml
+        ],
     )
 
     plugins: List[Plugin] = []
-    for plugin in _plugins:
-
-        abspath = os.path.join(BASE, directory, plugin["path"])
+    for dir_name in _plugin_directories:
+        abspath = os.path.join(BASE, directory, dir_name)
         setup_py = os.path.join(abspath, "setup.py")
-        plugin_name = subprocess.check_output(
-            [sys.executable, setup_py, "--name"],
-            universal_newlines=True,
-        ).strip()
-        classifiers = subprocess.check_output(
-            [sys.executable, setup_py, "--classifiers"],
-            universal_newlines=True,
+        name_and_classifiers: List[str] = subprocess.check_output(
+            [sys.executable, setup_py, "--name", "--classifiers"],
+            text=True,
         ).splitlines()
+        name, classifiers = name_and_classifiers[0], name_and_classifiers[1:]
 
         if "hydra_plugins" in os.listdir(abspath):
-            module = "hydra_plugins." + plugin["dir_name"]
+            module = "hydra_plugins." + dir_name
             source_dir = "hydra_plugins"
         else:
-            module = plugin["dir_name"]
-            source_dir = plugin["dir_name"]
+            module = dir_name
+            source_dir = dir_name
 
         plugins.append(
             Plugin(
-                name=plugin_name,
+                name=name,
                 abspath=abspath,
                 source_dir=source_dir,
                 module=module,
-                dir_name=plugin["dir_name"],
+                dir_name=dir_name,
                 setup_py=setup_py,
                 classifiers=classifiers,
             )
@@ -282,7 +308,7 @@ def _isort_cmd() -> List[str]:
     return isort
 
 
-def _mypy_cmd(strict: bool, python_version: Optional[str] = "3.7") -> List[str]:
+def _mypy_cmd(strict: bool, python_version: Optional[str] = "3.8") -> List[str]:
     mypy = [
         "mypy",
         "--install-types",
@@ -299,8 +325,6 @@ def _mypy_cmd(strict: bool, python_version: Optional[str] = "3.7") -> List[str]:
 
 @nox.session(python=PYTHON_VERSIONS)  # type: ignore
 def lint(session: Session) -> None:
-    if session_python_as_tuple(session) <= (3, 6):
-        session.skip(f"Skipping session {session.name} as python >= 3.7 is required")
     _upgrade_basic(session)
     install_dev_deps(session)
     install_hydra(session, ["pip", "install", "-e"])
@@ -390,8 +414,6 @@ def lint_plugins_in_dir(session: Session, directory: str) -> None:
 @nox.session(python=PYTHON_VERSIONS)  # type: ignore
 @nox.parametrize("plugin", list_plugins("plugins"), ids=[p.name for p in list_plugins("plugins")])  # type: ignore
 def lint_plugins(session: Session, plugin: Plugin) -> None:
-    if session_python_as_tuple(session) <= (3, 6):
-        session.skip(f"Skipping session {session.name} as python >= 3.7 is required")
     if not is_plugin_compatible(session, plugin):
         session.skip(f"Skipping session {session.name}")
     _upgrade_basic(session)
@@ -478,7 +500,13 @@ def test_core(session: Session) -> None:
     session.install("pytest")
 
     if not SKIP_CORE_TESTS:
-        run_pytest(session, "build_helpers", "tests", *session.posargs)
+        run_pytest(
+            session,
+            "build_helpers",
+            "tests",
+            "-W ignore:pkg_resources is deprecated as an API:DeprecationWarning",
+            *session.posargs,
+        )
     else:
         session.log("Skipping Hydra core tests")
 

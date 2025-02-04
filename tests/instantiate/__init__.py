@@ -8,6 +8,7 @@ from typing import Any, Dict, List, NoReturn, Optional, Tuple
 from omegaconf import MISSING, DictConfig, ListConfig
 
 from hydra.types import TargetConf
+from hydra.utils import instantiate
 from tests.instantiate.module_shadowed_by_function import a_function
 
 module_shadowed_by_function = a_function
@@ -39,7 +40,7 @@ def partial_equal(obj1: Any, obj2: Any) -> bool:
     if isinstance(obj1, list):
         if len(obj1) != len(obj2):
             return False
-        return all([partial_equal(obj1[i], obj2[i]) for i in range(len(obj1))])
+        return all(partial_equal(o1, o2) for o1, o2 in zip(obj1, obj2))
     if not (isinstance(obj1, partial) and isinstance(obj2, partial)):
         return False
     return all(
@@ -232,8 +233,7 @@ class UserGroup:
 
 # RECURSIVE
 # Classes
-class Transform:
-    ...
+class Transform: ...
 
 
 class CenterCrop(Transform):
@@ -318,8 +318,7 @@ class Mapping:
 
 # Configs
 @dataclass
-class TransformConf:
-    ...
+class TransformConf: ...
 
 
 @dataclass
@@ -420,6 +419,19 @@ class NestedConf:
     b: Any = field(default_factory=lambda: User(name="b", age=2))
 
 
+class TargetWithInstantiateInInit:
+    def __init__(
+        self, user_config: Optional[DictConfig], user: Optional[User] = None
+    ) -> None:
+        if user:
+            self.user = user
+        else:
+            self.user = instantiate(user_config)
+
+    def __eq__(self, other: Any) -> bool:
+        return self.user.__eq__(other.user)
+
+
 def recisinstance(got: Any, expected: Any) -> bool:
     """Compare got with expected type, recursively on dict and list."""
     if not isinstance(got, type(expected)):
@@ -436,3 +448,6 @@ def recisinstance(got: Any, expected: Any) -> bool:
             for key in expected._fields
         )
     return True
+
+
+an_object = object()

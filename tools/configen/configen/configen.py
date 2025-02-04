@@ -22,6 +22,7 @@ from omegaconf._utils import (
     is_list_annotation,
     is_structured_config,
     is_union_annotation,
+    type_str,
 )
 
 from configen.config import Config, ConfigenConf, ModuleConf
@@ -29,7 +30,6 @@ from configen.utils import (
     collect_imports,
     convert_imports,
     is_tuple_annotation,
-    type_str,
 )
 
 # Adding the current working directory to the PYTHONPATH to allow generation of code
@@ -89,7 +89,6 @@ class ClassInfo:
 
 
 def is_incompatible(type_: Type[Any]) -> bool:
-
     opt = _resolve_optional(type_)
     # Unions are not supported (Except Optional)
     if not opt[0] and is_union_annotation(type_):
@@ -131,7 +130,6 @@ def is_incompatible(type_: Type[Any]) -> bool:
 
 
 def get_default_flags(module: ModuleConf) -> List[Parameter]:
-
     def_flags: List[Parameter] = []
 
     if module.default_flags._convert_ is not None:
