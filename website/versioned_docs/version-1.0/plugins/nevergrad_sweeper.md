@@ -7,7 +7,7 @@ sidebar_label: Nevergrad Sweeper plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-nevergrad-sweeper)](https://pypi.org/project/hydra-nevergrad-sweeper/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-nevergrad-sweeper)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-nevergrad-sweeper)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-nevergrad-sweeper.svg)](https://pypistats.org/packages/hydra-nevergrad-sweeper)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-nevergrad-sweeper/month)](https://pepy.tech/project/hydra-nevergrad-sweeper)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_nevergrad_sweeper/example)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_nevergrad_sweeper)
 

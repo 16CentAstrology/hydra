@@ -6,7 +6,7 @@ sidebar_label: Joblib Launcher plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-joblib-launcher)](https://pypi.org/project/hydra-joblib-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-joblib-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-joblib-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-joblib-launcher.svg)](https://pypistats.org/packages/hydra-joblib-launcher)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-joblib-launcher/month)](https://pepy.tech/project/hydra-joblib-launcher)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_joblib_launcher/example)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_joblib_launcher)
 

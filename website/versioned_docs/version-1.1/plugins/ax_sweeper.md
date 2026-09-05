@@ -9,7 +9,7 @@ import {ExampleGithubLink} from "@site/src/components/GithubLink"
 [![PyPI](https://img.shields.io/pypi/v/hydra-ax-sweeper)](https://img.shields.io/pypi/v/hydra-ax-sweeper)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-ax-sweeper)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-ax-sweeper)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-ax-sweeper.svg)](https://pypistats.org/packages/hydra-ax-sweeper)<ExampleGithubLink text="Example application" to="plugins/hydra_ax_sweeper/example"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_ax_sweeper"/>
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-ax-sweeper/month)](https://pepy.tech/project/hydra-ax-sweeper)<ExampleGithubLink text="Example application" to="plugins/hydra_ax_sweeper/example"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_ax_sweeper"/>
 
 
 This plugin provides a mechanism for Hydra applications to use the [Adaptive Experimentation Platform, aka Ax](https://ax.dev/). Ax can optimize any experiment - machine learning experiments, A/B tests, and simulations.

@@ -9,7 +9,7 @@ import GithubLink,{ExampleGithubLink} from "@site/src/components/GithubLink"
 [![PyPI](https://img.shields.io/pypi/v/hydra-joblib-launcher)](https://pypi.org/project/hydra-joblib-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-joblib-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-joblib-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-joblib-launcher.svg)](https://pypistats.org/packages/hydra-joblib-launcher)<ExampleGithubLink text="Example application" to="plugins/hydra_joblib_launcher/example"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_joblib_launcher"/>
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-joblib-launcher/month)](https://pepy.tech/project/hydra-joblib-launcher)<ExampleGithubLink text="Example application" to="plugins/hydra_joblib_launcher/example"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_joblib_launcher"/>
 
 The Joblib Launcher plugin provides a launcher for parallel tasks based on [`Joblib.Parallel`](https://joblib.readthedocs.io/en/latest/parallel.html).
 

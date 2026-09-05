@@ -7,7 +7,7 @@ sidebar_label: Ray Launcher plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-ray-launcher)](https://pypi.org/project/hydra-ray-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-ray-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-ray-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-ray-launcher.svg)](https://pypistats.org/packages/hydra-ray-launcher)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-ray-launcher/month)](https://pepy.tech/project/hydra-ray-launcher)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_ray_launcher/examples)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_ray_launcher)
 

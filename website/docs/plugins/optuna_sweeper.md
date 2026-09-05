@@ -9,7 +9,7 @@ import GithubLink,{ExampleGithubLink} from "@site/src/components/GithubLink"
 [![PyPI](https://img.shields.io/pypi/v/hydra-optuna-sweeper)](https://pypi.org/project/hydra-optuna-sweeper/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-optuna-sweeper)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-optuna-sweeper)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-optuna-sweeper.svg)](https://pypistats.org/packages/hydra-optuna-sweeper)<ExampleGithubLink text="Example application" to="plugins/hydra_optuna_sweeper/example"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_optuna_sweeper"/>
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-optuna-sweeper/month)](https://pepy.tech/project/hydra-optuna-sweeper)<ExampleGithubLink text="Example application" to="plugins/hydra_optuna_sweeper/example"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_optuna_sweeper"/>
 
 
 This plugin enables Hydra applications to utilize [Optuna](https://optuna.org) for the optimization of the parameters of experiments.

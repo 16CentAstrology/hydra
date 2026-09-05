@@ -6,7 +6,7 @@ sidebar_label: Submitit Launcher plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-submitit-launcher)](https://pypi.org/project/hydra-submitit-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-submitit-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-submitit-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-submitit-launcher.svg)](https://pypistats.org/packages/hydra-submitit-launcher)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-submitit-launcher/month)](https://pepy.tech/project/hydra-submitit-launcher)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_submitit_launcher/example)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_submitit_launcher)
 
@@ -106,4 +106,3 @@ $ cat 0/my_app.log
 [2020-05-28 15:05:23,511][__main__][INFO] - Process ID 15887 executing task 1 ...
 [2020-05-28 15:05:24,514][submitit][INFO] - Job completed successfully
 ```
-

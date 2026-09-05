@@ -9,7 +9,7 @@ import GithubLink,{ExampleGithubLink} from "@site/src/components/GithubLink"
 [![PyPI](https://img.shields.io/pypi/v/hydra-rq-launcher)](https://pypi.org/project/hydra-rq-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-rq-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-rq-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-rq-launcher.svg)](https://pypistats.org/packages/hydra-rq-launcher)<ExampleGithubLink text="Example application" to="plugins/hydra_rq_launcher/examples"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_rq_launcher"/>
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-rq-launcher/month)](https://pepy.tech/project/hydra-rq-launcher)<ExampleGithubLink text="Example application" to="plugins/hydra_rq_launcher/examples"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_rq_launcher"/>
 
 The RQ Launcher plugin provides a launcher for distributed execution and job queuing based on [Redis Queue (RQ)](https://python-rq.org).
 

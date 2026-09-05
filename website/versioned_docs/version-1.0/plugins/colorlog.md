@@ -6,7 +6,7 @@ sidebar_label: Colorlog plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-colorlog)](https://pypi.org/project/hydra-colorlog/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-colorlog)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-colorlog)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-colorlog.svg)](https://pypistats.org/packages/hydra-colorlog)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-colorlog/month)](https://pepy.tech/project/hydra-colorlog)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_colorlog/example)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_colorlog)
 

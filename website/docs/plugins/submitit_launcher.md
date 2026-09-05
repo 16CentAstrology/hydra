@@ -9,7 +9,7 @@ import GithubLink,{ExampleGithubLink} from "@site/src/components/GithubLink"
 [![PyPI](https://img.shields.io/pypi/v/hydra-submitit-launcher)](https://pypi.org/project/hydra-submitit-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-submitit-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-submitit-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-submitit-launcher.svg)](https://pypistats.org/packages/hydra-submitit-launcher)<ExampleGithubLink text="Example application" to="plugins/hydra_submitit_launcher/examples"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_submitit_launcher"/>
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-submitit-launcher/month)](https://pepy.tech/project/hydra-submitit-launcher)<ExampleGithubLink text="Example application" to="plugins/hydra_submitit_launcher/examples"/><ExampleGithubLink text="Plugin source" to="plugins/hydra_submitit_launcher"/>
 
 The Submitit Launcher plugin provides a [SLURM](https://slurm.schedmd.com/documentation.html) Launcher based on [Submitit](https://github.com/facebookincubator/submitit).
 

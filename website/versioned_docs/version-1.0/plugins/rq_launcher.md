@@ -6,7 +6,7 @@ sidebar_label: RQ Launcher plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-rq-launcher)](https://pypi.org/project/hydra-rq-launcher/)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-rq-launcher)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-rq-launcher)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-rq-launcher.svg)](https://pypistats.org/packages/hydra-rq-launcher)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-rq-launcher/month)](https://pepy.tech/project/hydra-rq-launcher)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_rq_launcher/example)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_rq_launcher)
 

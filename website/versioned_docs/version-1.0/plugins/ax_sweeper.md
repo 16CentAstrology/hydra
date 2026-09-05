@@ -6,7 +6,7 @@ sidebar_label: Ax Sweeper plugin
 [![PyPI](https://img.shields.io/pypi/v/hydra-ax-sweeper)](https://img.shields.io/pypi/v/hydra-ax-sweeper)
 ![PyPI - License](https://img.shields.io/pypi/l/hydra-ax-sweeper)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hydra-ax-sweeper)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/hydra-ax-sweeper.svg)](https://pypistats.org/packages/hydra-ax-sweeper)
+[![PyPI - Downloads](https://api.pepy.tech/badge/hydra-ax-sweeper/month)](https://pepy.tech/project/hydra-ax-sweeper)
 [![Example application](https://img.shields.io/badge/-Example%20application-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_ax_sweeper/example)
 [![Plugin source](https://img.shields.io/badge/-Plugin%20source-informational)](https://github.com/facebookresearch/hydra/tree/1.0_branch/plugins/hydra_ax_sweeper)
 
