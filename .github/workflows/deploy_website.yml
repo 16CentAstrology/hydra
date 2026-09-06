@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - main
-      - deploy_website_hydra
+    paths:
+      - .github/workflows/deploy_website.yml
+      - website/**
+      - tools/landscape/data/decisions.json
+      - tools/landscape/build_public_landscape.py
   pull_request:
     branches:
       - main
@@ -13,18 +17,17 @@ on:
       - website/**
       - tools/landscape/data/decisions.json
       - tools/landscape/build_public_landscape.py
-
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  deploy:
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,39 +38,38 @@ jobs:
     - uses: actions/setup-python@v6
       with:
         python-version: "3.12"
-    - name: Build or deploy website
-      env:
-        WEBSITE_GITHUB_TOKEN: ${{ github.event_name != 'pull_request' && secrets.WEBSITE_GITHUB_TOKEN || '' }}
-        IS_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
-      run: |
-        PATHS=(
-          .github/workflows/deploy_website.yml
-          website
-          tools/landscape/data/decisions.json
-          tools/landscape/build_public_landscape.py
-        )
-        git fetch
-        REV=$(git log -5 --pretty=oneline origin/gh-pages | grep "Deploy website" |  awk 'NF>1{print $NF}'  | head -1)
-        # This condition passes in 2 conditions:
-        # 1. The revision does not exist (squash/force push happened)
-        # 2. There are changes between last deployed revision and HEAD
-        if [[ ! $(git rev-parse --verify -q "$REV^{commit}") ||  $(git diff-index $REV -- "${PATHS[@]}") ]]; then
-          echo "Changes affecting the website were detected between origin/main and this diff"
-          cd website
-          corepack enable
-          corepack pnpm install --frozen-lockfile
-          corepack pnpm run test:security-patches
-          if [[ "$IS_PULL_REQUEST" == "true" ]]; then
-            corepack pnpm run build
-          else
-            git config --global user.email 137557794+meta-hydra-bot@users.noreply.github.com
-            git config --global user.name meta-hydra-bot
-            WEBSITE_NETRC="$HOME/.netrc"
-            trap 'rm -f "$WEBSITE_NETRC"' EXIT
-            umask 077
-            echo "machine github.com login meta-hydra-bot password $WEBSITE_GITHUB_TOKEN" > "$WEBSITE_NETRC"
-            GIT_USER=meta-hydra-bot corepack pnpm run deploy
-          fi
-        else
-          echo "No website changes detected between origin/main and this diff"
-        fi
+    - name: Enable Corepack
+      run: corepack enable
+    - name: Install website dependencies
+      working-directory: website
+      run: corepack pnpm install --frozen-lockfile
+    - name: Test security patches
+      working-directory: website
+      run: corepack pnpm run test:security-patches
+    - name: Build website
+      working-directory: website
+      run: corepack pnpm run build
+    - name: Configure GitHub Pages
+      if: github.event_name != 'pull_request'
+      uses: actions/configure-pages@v6
+    - name: Upload GitHub Pages artifact
+      if: github.event_name != 'pull_request'
+      uses: actions/upload-pages-artifact@v5
+      with:
+        path: website/build
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v5

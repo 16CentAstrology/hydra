@@ -13,7 +13,6 @@
     "build": "node scripts/run-landscape-generator.mjs && docusaurus build",
     "validate:landscape": "node scripts/run-landscape-generator.mjs --check && node scripts/validate-landscape.mjs",
     "swizzle": "docusaurus swizzle",
-    "deploy": "node scripts/run-landscape-generator.mjs && docusaurus deploy",
     "test:security-patches": "node scripts/test-security-patches.mjs"
   },
   "dependencies": {
