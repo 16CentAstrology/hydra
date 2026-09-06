@@ -72,10 +72,17 @@ shell commands for things that genuinely require shell execution: `sl`
 
 ## Reproduction files
 
-When asked to create a reproduction for an issue, place files under `temp/`:
+When asked to create a reproduction for an issue, place files under
+`temp/repro/`:
 
-- Single-file repro: `temp/<issue_number>.py`
-- Multi-file repro: `temp/<issue_number>/`
+- Single-file repro: `temp/repro/<issue_number>.py`
+- Multi-file repro: `temp/repro/<issue_number>/`
+
+## Scratch files
+
+Place low-value, disposable temporary files under `temp/scratch/`. Its contents
+may be cleared weekly without review. Do not store reproductions, resumable
+workflow state, unique evidence, or drafts awaiting use there.
 
 ## Stop and ask
 
